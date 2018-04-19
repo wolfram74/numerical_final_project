@@ -38,8 +38,10 @@ def euler_err():
     # dominant = gauss_terms.coeff(u, 1)
     approx = taylor(discrep, h, 4)
     print('taylor to 4th order')
+    sympy.pprint(approx)
     sympy.pprint(approx.collect(h))
-    # sympy.pprint(approx.simplify().collect(h))
+    print('or')
+    sympy.pprint(approx.simplify().expand().collect(h))
     try:
         maxA
     except NameError:
@@ -96,5 +98,5 @@ def verlet_err():
     return
 
 if __name__ == '__main__':
-    # euler_err()
-    verlet_err()
+    euler_err()
+    # verlet_err()
