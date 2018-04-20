@@ -1,0 +1,37 @@
+a particle class that has properties:
+  position_velocity_state (numpy array)
+  time (float)
+  neighbor_ids (list of ints)
+  kernels (5 numpy arrays [first one is 0's])
+
+calculating forces at some state involves
+  generating the cell list
+  for each particle
+    using the cell list to find neighbors
+
+if we wanted to use an RK4 for the particles
+  each particle would need to tabulate it's 4 kernels
+  each kernel is the sum of
+    confinement force
+    driving force
+    drag
+    interaction forces
+  kernels are the deltas for position_veleocity_state 4-vector
+  to do a time step at current_time
+    make a cell list with a cell width of 2
+    have particles determine their cell list address
+    populate cell list with ID's
+    have particles look up relevant neighbors ID's
+    for kernel_num 1 through 4
+      for each particle
+        current_kernel is blanked
+        working_state is current_state+(kernel_num-1)
+        working_time is current_time + appropriate_time_step
+        calculate confinement_force at working_state
+        calculate driving_force at working_state and working_time
+        calculate drag at working_state
+        interaction_forces is blanked
+        for each neighbor
+          add to interaction_forces from
+    have particle density of about .25
+    check
