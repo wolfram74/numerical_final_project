@@ -6,10 +6,7 @@ class Particle():
         self.state=numpy.zeros(4)
          
     def sepVec(self, vec1, vec2):
-		seperation = []
-		seperation = len(vec1)/2.
-		seperation = numpy.subtract(vec1[:2], vec2[:2])
-		return seperation
+		return vec1[:2] - vec2[:2]
  
     def set_positions(self, x_position, y_position):
         self.state[:2]=[x_position, y_position]
