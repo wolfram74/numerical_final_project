@@ -39,5 +39,21 @@ class SystemTest(unittest.TestCase):
         system.add_particle(Particle())
         self.assertEqual(2, len(system.particles))
 
+    def test_make_cell_list():
+        system = classes.System(width=500., height=200., cell_length=2.)
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.particles[0].state[:2] = [1.4, 1.2 ]
+        system.particles[1].state[:2] = [4.4, 3.2 ]
+        system.particles[2].state[:2] = [8.4, 5.2 ]
+        system.particles[3].state[:2] = [9.4, 5.7 ]
+        system.populate_cell_list()
+        self.assertEqual([0],system.cell_list[0][0])
+        self.assertEqual([1],system.cell_list[2][1])
+        self.assertEqual([2,3],system.cell_list[4][2])
+
+
 if __name__ == '__main__':
     unittest.main()
