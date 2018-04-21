@@ -56,8 +56,11 @@ class SystemTest(unittest.TestCase):
         system = classes.System()
         system.add_particle(classes.Particle())
         self.assertEqual(1, len(system.particles))
+        self.assertEqual(system, system.particles[0].system)
+
         system.add_particle(classes.Particle())
         self.assertEqual(2, len(system.particles))
+
     @unittest.skip('pending feature')
     def test_make_cell_list():
         system = classes.System(width=500., height=200., cell_length=2.)
