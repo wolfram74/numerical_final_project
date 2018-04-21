@@ -23,3 +23,17 @@ class System():
         place_y=random.random()*self.height
         particle_to_place=Particle()
         particle_to_place.set_position(place_x,place_y)
+
+	def drag_force(self, vec1):
+		system = classes.System(drag_coeff = .1)
+		drag_force = drag_coeff * state[3]
+		force = - system.drag_force(state)
+		return force
+		
+		'''
+		system = classes.System(drag_coeff = .1)
+        state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
+        
+        self.assertEqual(0.0, force[2])
+        self.assertTrue(0.0 > force[3]*state[3])
+        '''
