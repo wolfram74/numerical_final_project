@@ -29,6 +29,24 @@ class ParticleTest(unittest.TestCase):
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
 
+    def test_get_neighbors(self):
+        system = classes.System(width=6., height=7., cell_length=1.)
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.add_particle(Particle())
+        system.particles[0].state[:2] = [2.5, 2.5]
+        system.particles[1].state[:2] = [1.5, 2.5]
+        system.particles[2].state[:2] = [0.5, 3.5]
+        system.particles[3].state[:2] = [5.5, 3.5]
+        system.particles[4].state[:2] = [3.5, 5.5]
+        system.populate_cell_list()
+        self.assertEqual(2, len(system.particles[0].neighbors))
+        self.assertEqual(3, len(system.particles[1].neighbors))
+        self.assertEqual([0,2,3], sorted(system.particles[1].neighbors))
+        self.assertEqual(0, len(system.particles[4].neighbors))
+
 class SystemTest(unittest.TestCase):
     def test_meta(self):
         self.assertTrue(True)
