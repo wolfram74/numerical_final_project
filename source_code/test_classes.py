@@ -87,8 +87,18 @@ class SystemTest(unittest.TestCase):
 
     @unittest.skip('pending feature')
     def test_confinement_force():
-        pass
-        # system = classes.System(buffer_width = 10., height=100.)
+        system = classes.System(buffer_width = 10., height=100.)
+        bottom_state = numpy.array([0.0,5.0, 0, 0])
+        force_bottom = system.confinement_force(bottom_state)
+        self.assertTrue(force_bottom[3]>0)
+        top_state = numpy.array([0.0,95.0, 0, 0])
+        force_top = system.confinement_force(top_state)
+        self.assertTrue(force_top[3]<0)
+        middle_state = numpy.array([0.0,50.0, 0, 0])
+        force_middle = system.confinement_force(middle_state)
+        self.assertTrue(abs(force_middle[3]) < abs(force_top))
+
+
 
 if __name__ == '__main__':
     unittest.main()
