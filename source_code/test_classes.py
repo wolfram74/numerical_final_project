@@ -19,6 +19,7 @@ class ParticleTest(unittest.TestCase):
         deltax = self.random4vec_1[0] - self.random4vec_2[0]
         self.assertEqual(deltax, seperation[0])
 
+    @unittest.skip('pending feature')
     def test_address_find(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(Particle())
@@ -29,6 +30,7 @@ class ParticleTest(unittest.TestCase):
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
 
+    @unittest.skip('pending feature')
     def test_get_neighbors(self):
         system = classes.System(width=6., height=7., cell_length=1.)
         system.add_particle(Particle())
@@ -56,7 +58,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(1, len(system.particles))
         system.add_particle(Particle())
         self.assertEqual(2, len(system.particles))
-
+    @unittest.skip('pending feature')
     def test_make_cell_list():
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(Particle())
@@ -72,6 +74,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[2][1])
         self.assertEqual([2,3],system.cell_list[4][2])
 
+    @unittest.skip('pending feature')
     def test_drag_force():
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
@@ -79,6 +82,10 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(0.0, force[2])
         self.assertTrue(0.0 > force[3]*state[3])
 
+    @unittest.skip('pending feature')
+    def test_confinement_force():
+        pass
+        # system = classes.System(buffer_width = 10., height=100.)
 
 if __name__ == '__main__':
     unittest.main()
