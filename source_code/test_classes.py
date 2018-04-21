@@ -56,7 +56,7 @@ class SystemTest(unittest.TestCase):
         system = classes.System()
         system.add_particle(classes.Particle())
         self.assertEqual(1, len(system.particles))
-        self.assertEqual(system = system.particles[0].system)
+        self.assertEqual(system, system.particles[0].system)
 
         system.add_particle(classes.Particle())
         self.assertEqual(2, len(system.particles))
