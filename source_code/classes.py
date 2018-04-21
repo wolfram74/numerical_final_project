@@ -11,7 +11,7 @@ class System():
     def __init__(self,width=100,height=100):
         self.width=width
         self.height=height
-        self.particle=list[]
+        self.particle=[]
     def add_particle(self):
         place_x=random.random()*self.width
         place_y=random.random()*self.height
