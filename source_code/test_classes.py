@@ -22,7 +22,7 @@ class ParticleTest(unittest.TestCase):
     @unittest.skip('pending feature')
     def test_address_find(self):
         system = classes.System(width=500., height=200., cell_length=2.)
-        system.add_particle(Particle())
+        system.add_particle(classes.Particle())
         system.particles[0].state[:2] = [1.4, 1.2 ]
         self.assertEqual([0,0], system.particles[0].cell_address())
         system.particles[0].state[:2] = [201.4, 201.2 ]
@@ -33,11 +33,11 @@ class ParticleTest(unittest.TestCase):
     @unittest.skip('pending feature')
     def test_get_neighbors(self):
         system = classes.System(width=6., height=7., cell_length=1.)
-        system.add_particle(Particle())
-        system.add_particle(Particle())
-        system.add_particle(Particle())
-        system.add_particle(Particle())
-        system.add_particle(Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
         system.particles[0].state[:2] = [2.5, 2.5]
         system.particles[1].state[:2] = [1.5, 2.5]
         system.particles[2].state[:2] = [0.5, 3.5]
@@ -54,17 +54,17 @@ class SystemTest(unittest.TestCase):
         self.assertTrue(True)
     def test_add_particle(self):
         system = classes.System()
-        system.add_particle(Particle())
+        system.add_particle(classes.Particle())
         self.assertEqual(1, len(system.particles))
-        system.add_particle(Particle())
+        system.add_particle(classes.Particle())
         self.assertEqual(2, len(system.particles))
     @unittest.skip('pending feature')
     def test_make_cell_list():
         system = classes.System(width=500., height=200., cell_length=2.)
-        system.add_particle(Particle())
-        system.add_particle(Particle())
-        system.add_particle(Particle())
-        system.add_particle(Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
+        system.add_particle(classes.Particle())
         system.particles[0].state[:2] = [1.4, 1.2 ]
         system.particles[1].state[:2] = [4.4, 3.2 ]
         system.particles[2].state[:2] = [8.4, 5.2 ]
