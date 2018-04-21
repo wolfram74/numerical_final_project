@@ -38,3 +38,6 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(1, len(system.particles))
         system.add_particle(Particle())
         self.assertEqual(2, len(system.particles))
+
+if __name__ == '__main__':
+    unittest.main()
