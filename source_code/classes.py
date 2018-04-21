@@ -3,7 +3,7 @@ import random
 
 class Particle():
     def __init__(self):
-        self.state=[0,0,0,0]
+        self.state=numpy.zeros(4)
     def set_positions(self, x_position, y_position)
         self.state[:2]=[x_position, y_position]
 
