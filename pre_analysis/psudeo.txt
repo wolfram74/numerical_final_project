@@ -4,11 +4,15 @@ a particle class that has properties:
   neighbor_ids (list of ints, index value in container class)
   kernels (5 numpy arrays [first one is 0's])
   reference to container class
+  has functions for:
+    calculating separation between two working states
+    calculating
 
-a container class that has properties
+
+a system class that has properties
   a list of particles
   a function that given a particle state and a time returns
-
+    cumulative force of drag, confinement and driving
 
 calculating forces at some state involves
   generating the cell list
