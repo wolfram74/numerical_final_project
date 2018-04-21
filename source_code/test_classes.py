@@ -72,6 +72,13 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[2][1])
         self.assertEqual([2,3],system.cell_list[4][2])
 
+    def test_drag_force():
+        system = classes.System(drag_coeff = .1)
+        state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
+        force = system.drag_force(state)
+        self.assertEqual(0.0, force[2])
+        self.assertTrue(0.0 > force[3]*state[3])
+
 
 if __name__ == '__main__':
     unittest.main()
