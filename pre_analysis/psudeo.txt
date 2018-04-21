@@ -6,14 +6,15 @@ a particle class that has properties:
   reference to container class
   has functions for:
     calculating separation between two working states
-    calculating
+    calculating it's address for the cell list
+
 
 
 a system class that has properties
   a list of particles
   a function that given a particle state and a time returns
     cumulative force of drag, confinement and driving
-
+  a function that populates the cell list
 
 calculating forces at some state involves
   generating the cell list
