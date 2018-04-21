@@ -11,6 +11,7 @@ class ParticleTest(unittest.TestCase):
 
     def test_meta(self):
         self.assertTrue(True)
+
     def test_seperation_calc(self):
         particle = classes.Particle()
         seperation = particle.sepVec(self.random4vec_1, self.random4vec_2)
@@ -18,6 +19,15 @@ class ParticleTest(unittest.TestCase):
         deltax = self.random4vec_1[0] - self.random4vec_2[0]
         self.assertEqual(deltax, seperation[0])
 
+    def test_address_find(self):
+        system = classes.System(width=500., height=200., cell_length=2.)
+        system.add_particle(Particle())
+        system.particles[0].state[:2] = [1.4, 1.2 ]
+        self.assertEqual([0,0], system.particles[0].cell_address())
+        system.particles[0].state[:2] = [201.4, 201.2 ]
+        self.assertEqual([100,0], system.particles[0].cell_address())
+        system.particles[0].state[:2] = [15.4, 11.2 ]
+        self.assertEqual([7,5], system.particles[0].cell_address())
 
 class SystemTest(unittest.TestCase):
     def test_meta(self):
