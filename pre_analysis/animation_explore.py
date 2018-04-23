@@ -7,7 +7,9 @@ import os
 def load_data(file_address):
     file_data = open(file_address, 'r')
     positions = []
+    # print(file_address)
     for line in file_data:
+        # print(line, line.split())
         values = [float(ele) for ele in line.split()]
         positions.append(values[:2])
     return positions
@@ -38,34 +40,34 @@ def frame_init():
     # print(field.get_array())
     # field.set_data(x_vals, y_vals)
 
-def frame_gen(frame_data):
+def frame_gen(frame_address):
     # del x_vals[:]
     # del y_vals[:]
     axes.clear()
-    positions = load_data()
-    x_vals=[math.cos(3.14*frame_num/100.0)]
-    y_vals=[math.sin(3.14*frame_num/100.0)]
+    positions = load_data(frame_address)
+    x_vals = read_column(positions,0)
+    y_vals = read_column(positions,1)
     axes.scatter(x_vals, y_vals)
     axes.set_ylim(-1, 1)
     axes.set_xlim(-1, 1)
 
 def find_files(folder):
     files = os.listdir(folder)
-    usable_files = filter(lambda x: 'ds' not in x, files)
+    usable_files = filter(lambda x: 'Store' not in x, files)
     address = map(lambda x: "%s/%s" %(folder, x), usable_files)
     return address
 
 if __name__=='__main__':
-    data = load_data('../produced_data/tht_0.6666_w_137/t_0.txt')
+    # data = load_data('../produced_data/tht_0.6666_w_137/t_0.txt')
     axes.set_ylim(-1, 1)
     axes.set_xlim(-1, 1)
-    print(find_files('../produced_data/tht_0.6666_w_137'))
-    # movie = animation.FuncAnimation(
-    #     fig,
-    #     frame_gen,
-    #     frames=find_files('../produced_data/tht_0.6666_w_137')
-    #     )
-    # movie.save('test_circle.mp4')
+    # print(find_files('../produced_data/tht_0.6666_w_137'))
+    movie = animation.FuncAnimation(
+        fig,
+        frame_gen,
+        frames=find_files('../produced_data/tht_0.6666_w_137')
+        )
+    movie.save('test_files.mp4')
 # '''
 '''
 import matplotlib.pyplot as plt
