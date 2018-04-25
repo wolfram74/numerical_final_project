@@ -26,6 +26,22 @@ class Particle():
         y_index = int(self.state[1]/self.system.cell_length)
         return [x_index, y_index]
 
+    def populate_neighbor_ids(self):
+        col, row = self.cell_address()
+        system = self.system
+        self.neighbor_ids = []
+        margin = 2
+        col_max = len(system.cell_list[0])-1
+        row_max = len(system.cell_list)-1
+        for col_index in range(col-margin, col+margin+1):
+            for row_index in range(row-margin, row+margin+1):
+                if row_index > row_max or row_index < 0:
+                    continue
+                inspect_row = row_index
+                inspect_col = col_index%(col_max+1)
+                self.neighbor_ids += system.cell_list[inspect_row][inspect_col]
+        self.neighbor_ids.remove(self.index)
+
 class System():
     def __init__(self,
             width=100, height=100,
@@ -60,11 +76,13 @@ class System():
 
     def populate_cell_list(self):
         pass
-        x_cells = int(self.width/self.cell_length)+1
-        y_cells = int(self.height/self.cell_length)+1
+        x_cells = int(numpy.ceil(self.width/self.cell_length))
+        y_cells = int(numpy.ceil(self.height/self.cell_length))
         self.cell_list = [[
             [] for x_ind in range(x_cells)
         ] for y_ind in range(y_cells)]
         for particle in self.particles:
-            row, col = particle.cell_address()
-            self.cell_list[col][row].append(particle.index)
+            col, row = particle.cell_address()
+            self.cell_list[row][col].append(particle.index)
+        for particle in self.particles:
+            particle.populate_neighbor_ids()

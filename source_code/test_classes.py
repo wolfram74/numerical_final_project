@@ -42,7 +42,7 @@ class ParticleTest(unittest.TestCase):
         system.particles[1].state[:2] = [1.5, 2.5]
         system.particles[2].state[:2] = [0.5, 3.5]
         system.particles[3].state[:2] = [5.5, 3.5]
-        system.particles[4].state[:2] = [3.5, 5.5]
+        system.particles[4].state[:2] = [3.5, 6.5]
         system.populate_cell_list()
         self.assertEqual(2, len(system.particles[0].neighbor_ids))
         self.assertEqual(3, len(system.particles[1].neighbor_ids))
