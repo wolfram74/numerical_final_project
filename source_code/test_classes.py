@@ -49,15 +49,15 @@ class ParticleTest(unittest.TestCase):
         self.assertEqual([0,2,3], sorted(system.particles[1].neighbor_ids))
         self.assertEqual(0, len(system.particles[4].neighbor_ids))
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_interaction_force(self):
         particle = classes.Particle()
-        force = particle.interaction_froce(self.random4vec_1, self.random4vec_2)
+        force = particle.interaction_force(self.random4vec_1, self.random4vec_2)
         seperation = particle.sepVec(self.random4vec_1, self.random4vec_2)
         sep_angle = numpy.arctan2(seperation[0], seperation[1])
         opp_force_angle = numpy.arctan2(-force[2], -force[3])
         self.assertTrue(abs(sep_angle-opp_force_angle) < 10.**-3)
-        force2 = particle.interaction_froce(
+        force2 = particle.interaction_force(
             2*self.random4vec_1, 2*self.random4vec_2
             )
         self.assertTrue( numpy.linalg.norm(force)>numpy.linalg.norm(force2))

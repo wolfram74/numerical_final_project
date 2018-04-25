@@ -42,6 +42,14 @@ class Particle():
                 self.neighbor_ids += system.cell_list[inspect_row][inspect_col]
         self.neighbor_ids.remove(self.index)
 
+    def interaction_force(self, state1, state2):
+        force = numpy.zeros(4)
+        seperation = self.sepVec(state1, state2)
+        radius = numpy.linalg.norm(seperation)
+        decay = numpy.exp(-radius)
+        force[2:] = -seperation/(radius**3)
+        return force*decay
+
 class System():
     def __init__(self,
             width=100, height=100,
