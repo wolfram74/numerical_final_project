@@ -113,7 +113,7 @@ class SystemTest(unittest.TestCase):
 
 class TimeStepTest(unittest.TestCase):
     def setUp(self):
-        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01)
+        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01, cell_length=2.)
         self.system.add_particle(classes.Particle())
 
     @unittest.skip('pending feature')
