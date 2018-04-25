@@ -115,6 +115,7 @@ class TimeStepTest(unittest.TestCase):
     def setUp(self):
         self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01)
         self.system.add_particle(classes.Particle())
+
     def test_drag_over_time():
         self.system.drag_coeff = .1
         vx_0 = 10.0
@@ -151,8 +152,22 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state,
             self.system.particles[1].state
             )
-        self.assertTrue( numpy.linalg.norm(sep_final)>numpy.linalg.norm(sep_init))
+        self.assertTrue(
+            numpy.linalg.norm(sep_final) > numpy.linalg.norm(sep_init)
+            )
 
+    def test_periodicity_cosntraint():
+        vx_0 = 10.0
+        steps = 100
+        self.system.particles[0].state[:] = [499.0, 100.0, vx_0, 0]
+        for i in range(steps):
+            self.system.time_step()
+        self.assertTrue(
+            self.system.particles[0][0] < self.system.width
+            )
+        self.assertTrue(
+            self.system.particles[0][0] < vx_0*self.system.time_step*steps
+            )
 
 if __name__ == '__main__':
     unittest.main()
