@@ -30,7 +30,7 @@ class ParticleTest(unittest.TestCase):
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_get_neighbors(self):
         system = classes.System(width=6., height=7., cell_length=1.)
         system.add_particle(classes.Particle())
@@ -44,10 +44,10 @@ class ParticleTest(unittest.TestCase):
         system.particles[3].state[:2] = [5.5, 3.5]
         system.particles[4].state[:2] = [3.5, 5.5]
         system.populate_cell_list()
-        self.assertEqual(2, len(system.particles[0].neighbors))
-        self.assertEqual(3, len(system.particles[1].neighbors))
-        self.assertEqual([0,2,3], sorted(system.particles[1].neighbors))
-        self.assertEqual(0, len(system.particles[4].neighbors))
+        self.assertEqual(2, len(system.particles[0].neighbor_ids))
+        self.assertEqual(3, len(system.particles[1].neighbor_ids))
+        self.assertEqual([0,2,3], sorted(system.particles[1].neighbor_ids))
+        self.assertEqual(0, len(system.particles[4].neighbor_ids))
 
     @unittest.skip('pending feature')
     def test_interaction_force(self):
