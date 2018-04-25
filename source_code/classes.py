@@ -28,9 +28,16 @@ class System():
             time_step=0.01, cell_length=2.
             ):
     #angle off of y axis
-        self.width=width
-        self.height=height
-        self.particles=[]
+        self.width = width
+        self.height = height
+        self.drag_coeff = drag_coeff
+        self.buffer_width = buffer_width
+        self.cell_length = cell_length
+        self.time_step = time_step
+        self.particles = []
+        self.amplitude = amplitude
+        self.frequency = frequency
+        self.angle = angle
 
     def add_particle(self, particle):
         particle.set_system(self)
@@ -44,3 +51,11 @@ class System():
         particle_to_place.set_position(place_x,place_y)
         particle_to_place.set_system(self)
         self.add_particle(particle_to_place)
+
+    def populate_cell_list(self):
+        pass
+        x_cells = int(self.width/self.cell_length)+1
+        y_cells = int(self.height/self.cell_length)+1
+        self.cell_list = [[
+            [] for x_ind in range(x_cells)
+        ] for y_ind in range(y_cells)]
