@@ -134,5 +134,25 @@ class TimeStepTest(unittest.TestCase):
         self.assertTrue(y_0 < self.system.particles[0].state[1])
         self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
 
+    def test_interaction_over_time():
+        self.system.add_particle(classes.Particle())
+        self.system.particles[0].state[:2] = [20.0, 100.0]
+        self.system.particles[1].state[:2] = (
+            self.system.particles[0].state[:2]+
+            self.random4vec_1[:2]/2
+            )
+        sep_init = self.system.particles[0].sepVec(
+            self.system.particles[0].state,
+            self.system.particles[1].state
+            )
+        for i in range(100):
+            self.system.time_step()
+        sep_final = self.system.particles[0].sepVec(
+            self.system.particles[0].state,
+            self.system.particles[1].state
+            )
+        self.assertTrue( numpy.linalg.norm(sep_final)>numpy.linalg.norm(sep_init))
+
+
 if __name__ == '__main__':
     unittest.main()
