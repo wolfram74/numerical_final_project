@@ -111,7 +111,28 @@ class SystemTest(unittest.TestCase):
         force_middle = system.confinement_force(middle_state)
         self.assertTrue(abs(force_middle[3]) < abs(force_top))
 
+class TimeStepTest(unittest.TestCase):
+    def setUp(self):
+        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01)
+        self.system.add_particle(classes.Particle())
+    def test_drag_over_time():
+        self.system.drag_coeff = .1
+        vx_0 = 10.0
+        self.system.particles[0].state[:] = [20.0, 100.0, vx_0, 0]
+        for i in range(100):
+            self.system.time_step()
+        self.assertTrue(vx_0 > self.system.particles[0].state[2])
+        self.assertTrue(0.0 <= self.system.particles[0].state[2])
 
+    def test_confinement_over_time():
+        self.system.add_particle(classes.Particle())
+        y_0 = 1.0
+        self.system.particles[0].state[1] =  y_0
+        self.system.particles[1].state[1] =  self.system.height-y_0
+        for i in range(100):
+            self.system.time_step()
+        self.assertTrue(y_0 < self.system.particles[0].state[1])
+        self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
 
 if __name__ == '__main__':
     unittest.main()
