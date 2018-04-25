@@ -2,8 +2,11 @@ import numpy
 import random
 
 class Particle():
-    def __init__(self, state=numpy.zeros(4), index=None, system=None):
-        self.state = state
+    def __init__(self, state=None, index=None, system=None):
+        if state:
+            self.state = state
+        else:
+            self.state = numpy.zeros(4)
         self.index = index
         self.system = system
         self.kernels = numpy.zeros([5,4])
@@ -62,3 +65,6 @@ class System():
         self.cell_list = [[
             [] for x_ind in range(x_cells)
         ] for y_ind in range(y_cells)]
+        for particle in self.particles:
+            row, col = particle.cell_address()
+            self.cell_list[col][row].append(particle.index)

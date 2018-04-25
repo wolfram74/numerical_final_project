@@ -87,8 +87,8 @@ class SystemTest(unittest.TestCase):
         system.particles[3].state[:2] = [9.4, 5.7 ]
         system.populate_cell_list()
         self.assertEqual([0],system.cell_list[0][0])
-        self.assertEqual([1],system.cell_list[2][1])
-        self.assertEqual([2,3],system.cell_list[4][2])
+        self.assertEqual([1],system.cell_list[1][2])
+        self.assertEqual([2,3],system.cell_list[2][4])
 
     @unittest.skip('pending feature')
     def test_drag_force(self):
