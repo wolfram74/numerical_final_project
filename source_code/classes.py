@@ -19,7 +19,9 @@ class Particle():
         self.system=input_system
 
     def cell_address(self):
-        pass
+        x_index = int(self.state[0]/self.system.cell_length)
+        y_index = int(self.state[1]/self.system.cell_length)
+        return [x_index, y_index]
 
 class System():
     def __init__(self,

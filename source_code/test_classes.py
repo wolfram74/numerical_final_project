@@ -25,7 +25,7 @@ class ParticleTest(unittest.TestCase):
         system.add_particle(classes.Particle())
         system.particles[0].state[:2] = [1.4, 1.2 ]
         self.assertEqual([0,0], system.particles[0].cell_address())
-        system.particles[0].state[:2] = [201.4, 201.2 ]
+        system.particles[0].state[:2] = [201.4, 1.2 ]
         self.assertEqual([100,0], system.particles[0].cell_address())
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
