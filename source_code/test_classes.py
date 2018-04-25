@@ -19,18 +19,18 @@ class ParticleTest(unittest.TestCase):
         deltax = self.random4vec_1[0] - self.random4vec_2[0]
         self.assertEqual(deltax, seperation[0])
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_address_find(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(classes.Particle())
         system.particles[0].state[:2] = [1.4, 1.2 ]
         self.assertEqual([0,0], system.particles[0].cell_address())
-        system.particles[0].state[:2] = [201.4, 201.2 ]
+        system.particles[0].state[:2] = [201.4, 1.2 ]
         self.assertEqual([100,0], system.particles[0].cell_address())
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_get_neighbors(self):
         system = classes.System(width=6., height=7., cell_length=1.)
         system.add_particle(classes.Particle())
@@ -42,12 +42,12 @@ class ParticleTest(unittest.TestCase):
         system.particles[1].state[:2] = [1.5, 2.5]
         system.particles[2].state[:2] = [0.5, 3.5]
         system.particles[3].state[:2] = [5.5, 3.5]
-        system.particles[4].state[:2] = [3.5, 5.5]
+        system.particles[4].state[:2] = [3.5, 6.5]
         system.populate_cell_list()
-        self.assertEqual(2, len(system.particles[0].neighbors))
-        self.assertEqual(3, len(system.particles[1].neighbors))
-        self.assertEqual([0,2,3], sorted(system.particles[1].neighbors))
-        self.assertEqual(0, len(system.particles[4].neighbors))
+        self.assertEqual(2, len(system.particles[0].neighbor_ids))
+        self.assertEqual(3, len(system.particles[1].neighbor_ids))
+        self.assertEqual([0,2,3], sorted(system.particles[1].neighbor_ids))
+        self.assertEqual(0, len(system.particles[4].neighbor_ids))
 
     @unittest.skip('pending feature')
     def test_interaction_force(self):
@@ -74,8 +74,8 @@ class SystemTest(unittest.TestCase):
         system.add_particle(classes.Particle())
         self.assertEqual(2, len(system.particles))
 
-    @unittest.skip('pending feature')
-    def test_make_cell_list():
+    # @unittest.skip('pending feature')
+    def test_make_cell_list(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(classes.Particle())
         system.add_particle(classes.Particle())
@@ -87,11 +87,11 @@ class SystemTest(unittest.TestCase):
         system.particles[3].state[:2] = [9.4, 5.7 ]
         system.populate_cell_list()
         self.assertEqual([0],system.cell_list[0][0])
-        self.assertEqual([1],system.cell_list[2][1])
-        self.assertEqual([2,3],system.cell_list[4][2])
+        self.assertEqual([1],system.cell_list[1][2])
+        self.assertEqual([2,3],system.cell_list[2][4])
 
     @unittest.skip('pending feature')
-    def test_drag_force():
+    def test_drag_force(self):
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
         force = system.drag_force(state)
@@ -99,7 +99,7 @@ class SystemTest(unittest.TestCase):
         self.assertTrue(0.0 > force[3]*state[3])
 
     @unittest.skip('pending feature')
-    def test_confinement_force():
+    def test_confinement_force(self):
         system = classes.System(buffer_width = 10., height=100.)
         bottom_state = numpy.array([0.0,5.0, 0, 0])
         force_bottom = system.confinement_force(bottom_state)
@@ -113,11 +113,11 @@ class SystemTest(unittest.TestCase):
 
 class TimeStepTest(unittest.TestCase):
     def setUp(self):
-        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01)
+        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=0.01, cell_length=2.)
         self.system.add_particle(classes.Particle())
 
     @unittest.skip('pending feature')
-    def test_drag_over_time():
+    def test_drag_over_time(self):
         self.system.drag_coeff = .1
         vx_0 = 10.0
         self.system.particles[0].state[:] = [20.0, 100.0, vx_0, 0]
@@ -127,7 +127,7 @@ class TimeStepTest(unittest.TestCase):
         self.assertTrue(0.0 <= self.system.particles[0].state[2])
 
     @unittest.skip('pending feature')
-    def test_confinement_over_time():
+    def test_confinement_over_time(self):
         self.system.add_particle(classes.Particle())
         y_0 = 1.0
         self.system.particles[0].state[1] =  y_0
@@ -138,7 +138,7 @@ class TimeStepTest(unittest.TestCase):
         self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
 
     @unittest.skip('pending feature')
-    def test_interaction_over_time():
+    def test_interaction_over_time(self):
         self.system.add_particle(classes.Particle())
         self.system.particles[0].state[:2] = [20.0, 100.0]
         self.system.particles[1].state[:2] = (
@@ -160,7 +160,7 @@ class TimeStepTest(unittest.TestCase):
             )
 
     @unittest.skip('pending feature')
-    def test_periodicity_cosntraint():
+    def test_periodicity_cosntraint(self):
         vx_0 = 10.0
         steps = 100
         self.system.particles[0].state[:] = [499.0, 100.0, vx_0, 0]
