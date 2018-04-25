@@ -49,6 +49,19 @@ class ParticleTest(unittest.TestCase):
         self.assertEqual([0,2,3], sorted(system.particles[1].neighbors))
         self.assertEqual(0, len(system.particles[4].neighbors))
 
+    @unittest.skip('pending feature')
+    def test_interaction_force(self):
+        particle = classes.Particle()
+        force = particle.interaction_froce(self.random4vec_1, self.random4vec_2)
+        seperation = particle.sepVec(self.random4vec_1, self.random4vec_2)
+        sep_angle = numpy.arctan2(seperation[0], seperation[1])
+        opp_force_angle = numpy.arctan2(-force[2], -force[3])
+        self.assertTrue(abs(sep_angle-opp_force_angle) < 10.**-3)
+        force2 = particle.interaction_froce(
+            2*self.random4vec_1, 2*self.random4vec_2
+            )
+        self.assertTrue( numpy.linalg.norm(force)>numpy.linalg.norm(force2))
+
 class SystemTest(unittest.TestCase):
     def test_meta(self):
         self.assertTrue(True)
@@ -98,7 +111,67 @@ class SystemTest(unittest.TestCase):
         force_middle = system.confinement_force(middle_state)
         self.assertTrue(abs(force_middle[3]) < abs(force_top))
 
+class TimeStepTest(unittest.TestCase):
+    def setUp(self):
+        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=.01)
+        self.system.add_particle(classes.Particle())
 
+    @unittest.skip('pending feature')
+    def test_drag_over_time():
+        self.system.drag_coeff = .1
+        vx_0 = 10.0
+        self.system.particles[0].state[:] = [20.0, 100.0, vx_0, 0]
+        for i in range(100):
+            self.system.time_step()
+        self.assertTrue(vx_0 > self.system.particles[0].state[2])
+        self.assertTrue(0.0 <= self.system.particles[0].state[2])
+
+    @unittest.skip('pending feature')
+    def test_confinement_over_time():
+        self.system.add_particle(classes.Particle())
+        y_0 = 1.0
+        self.system.particles[0].state[1] =  y_0
+        self.system.particles[1].state[1] =  self.system.height-y_0
+        for i in range(100):
+            self.system.time_step()
+        self.assertTrue(y_0 < self.system.particles[0].state[1])
+        self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
+
+    @unittest.skip('pending feature')
+    def test_interaction_over_time():
+        self.system.add_particle(classes.Particle())
+        self.system.particles[0].state[:2] = [20.0, 100.0]
+        self.system.particles[1].state[:2] = (
+            self.system.particles[0].state[:2]+
+            self.random4vec_1[:2]/2
+            )
+        sep_init = self.system.particles[0].sepVec(
+            self.system.particles[0].state,
+            self.system.particles[1].state
+            )
+        for i in range(100):
+            self.system.time_step()
+        sep_final = self.system.particles[0].sepVec(
+            self.system.particles[0].state,
+            self.system.particles[1].state
+            )
+        self.assertTrue(
+            numpy.linalg.norm(sep_final) > numpy.linalg.norm(sep_init)
+            )
+
+    @unittest.skip('pending feature')
+    def test_periodicity_cosntraint():
+        vx_0 = 10.0
+        steps = 100
+        self.system.particles[0].state[:] = [499.0, 100.0, vx_0, 0]
+        for i in range(steps):
+            self.system.time_step()
+        self.assertTrue(
+            self.system.particles[0][0] < self.system.width
+            )
+        self.assertTrue(
+            self.system.particles[0][0] < vx_0*self.system.time_step*steps
+            )
 
 if __name__ == '__main__':
     unittest.main()
