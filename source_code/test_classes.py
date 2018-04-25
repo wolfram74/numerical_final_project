@@ -98,7 +98,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(0.0, force[2])
         self.assertTrue(0.0 > force[3]*state[3])
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_confinement_force(self):
         system = classes.System(buffer_width = 10., height=100.)
         bottom_state = numpy.array([0.0,5.0, 0, 0])
@@ -109,7 +109,7 @@ class SystemTest(unittest.TestCase):
         self.assertTrue(force_top[3]<0)
         middle_state = numpy.array([0.0,50.0, 0, 0])
         force_middle = system.confinement_force(middle_state)
-        self.assertTrue(abs(force_middle[3]) < abs(force_top))
+        self.assertTrue(abs(force_middle[3]) < abs(force_top[3]))
 
 class TimeStepTest(unittest.TestCase):
     def setUp(self):

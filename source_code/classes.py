@@ -86,3 +86,12 @@ class System():
             self.cell_list[row][col].append(particle.index)
         for particle in self.particles:
             particle.populate_neighbor_ids()
+
+    def confinement_force(self, state):
+        force = numpy.zeros(4)
+        y = state[1]
+        force[3] = -(
+            numpy.exp(self.buffer_width - self.height + y)
+            -numpy.exp(self.buffer_width - y)
+            )
+        return force
