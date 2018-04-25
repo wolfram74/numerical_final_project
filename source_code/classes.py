@@ -18,7 +18,8 @@ class Particle():
     def set_system(self, input_system):
         self.system=input_system
 
-
+    def cell_address(self):
+        pass
 
 class System():
     def __init__(self,

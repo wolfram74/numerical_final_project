@@ -19,7 +19,7 @@ class ParticleTest(unittest.TestCase):
         deltax = self.random4vec_1[0] - self.random4vec_2[0]
         self.assertEqual(deltax, seperation[0])
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_address_find(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(classes.Particle())
