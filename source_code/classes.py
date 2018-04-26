@@ -55,7 +55,11 @@ class Particle():
 
     def set_working_state(self, kernel_num):
         modifier = [0, 1.0, .5, .5, 1.0]
-        self.working_state = self.state + self.kernels[kernel_num-1]*modifier[kernel_num]
+        # print('working state set')
+        # print(self.kernels[kernel_num-1]*modifier[kernel_num])
+        self.working_state = self.state + (
+            self.kernels[kernel_num-1]*modifier[kernel_num]
+            )
 
     def total_force(self):
         output = numpy.zeros(4)
@@ -136,6 +140,8 @@ class System():
 
     def time_step(self):
         self.populate_cell_list()
+        for particle in self.particles:
+            particle.kernels = numpy.zeros([5,4])
         for kernel_num in range(1, 5):
             self.set_working_time(kernel_num)
             for particle in self.particles:
@@ -144,6 +150,7 @@ class System():
                 net_force = particle.total_force()
                 particle.kernels[kernel_num][:2] = particle.working_state[2:]
                 particle.kernels[kernel_num] += net_force
+                particle.kernels[kernel_num]*= self.step_size
         for particle in self.particles:
             particle.state += 6**(-1)*(
                 particle.kernels[1]+

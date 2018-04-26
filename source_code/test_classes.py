@@ -129,21 +129,14 @@ class TimeStepTest(unittest.TestCase):
     # @unittest.skip('pending feature')
     def test_confinement_over_time(self):
         self.system.add_particle(classes.Particle())
-        y_0 = 6.0
+        y_0 = 1.0
         self.system.particles[0].state[1] =  y_0
         self.system.particles[1].state[1] =  self.system.height-y_0
-        print(self.system.time)
-        print(self.system.particles[0].state)
-        print(self.system.particles[1].state)
 
-        for i in range(100):
+        for i in range(10):
             self.system.time_step()
-            print(self.system.time)
-            print(self.system.particles[0].state)
-            print(self.system.particles[1].state)
         self.assertTrue(y_0 < self.system.particles[0].state[1])
         self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
-
     @unittest.skip('pending feature')
     def test_interaction_over_time(self):
         self.system.add_particle(classes.Particle())
