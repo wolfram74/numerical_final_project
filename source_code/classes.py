@@ -13,7 +13,10 @@ class Particle():
         self.neighbor_ids = []
 
     def sepVec(self, vec1, vec2):
-        return vec1[:2] - vec2[:2]
+        seperation = vec1[:2] - vec2[:2]
+        if self.system:
+            seperation[1] %= self.system.width #imposing periodic boundary along x
+        return seperation
 
     def set_positions(self, x_position, y_position):
         self.state[:2]=[x_position, y_position]
