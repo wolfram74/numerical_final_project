@@ -15,7 +15,7 @@ class Particle():
     def sepVec(self, vec1, vec2):
         seperation = vec1[:2] - vec2[:2]
         if self.system:
-            seperation[1] %= self.system.width #imposing periodic boundary along x
+            seperation[0] %= self.system.width #imposing periodic boundary along x
         return seperation
 
     def set_positions(self, x_position, y_position):
@@ -105,4 +105,9 @@ class System():
             numpy.exp(self.buffer_width - self.height + y)
             -numpy.exp(self.buffer_width - y)
             )
+        return force
+
+    def drag_force(self, state):
+        force = numpy.zeros(4)
+        force[2:] = -self.drag_coeff*state[2:]
         return force

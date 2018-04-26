@@ -90,7 +90,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[1][2])
         self.assertEqual([2,3],system.cell_list[2][4])
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_drag_force(self):
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
