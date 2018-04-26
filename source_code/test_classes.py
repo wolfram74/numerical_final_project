@@ -90,7 +90,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[1][2])
         self.assertEqual([2,3],system.cell_list[2][4])
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_drag_force(self):
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
@@ -113,6 +113,8 @@ class SystemTest(unittest.TestCase):
 
 class TimeStepTest(unittest.TestCase):
     def setUp(self):
+        self.random4vec_1 = numpy.array([random.random()*4.-2. for i in range(4)])
+        self.random4vec_2 = numpy.array([random.random()*4.-2. for i in range(4)])
         self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, step_size=0.01, cell_length=2.)
         self.system.add_particle(classes.Particle())
 
@@ -132,12 +134,12 @@ class TimeStepTest(unittest.TestCase):
         y_0 = 1.0
         self.system.particles[0].state[1] =  y_0
         self.system.particles[1].state[1] =  self.system.height-y_0
-
-        for i in range(10):
+        for i in range(100):
             self.system.time_step()
         self.assertTrue(y_0 < self.system.particles[0].state[1])
         self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
+
     def test_interaction_over_time(self):
         self.system.add_particle(classes.Particle())
         self.system.particles[0].state[:2] = [20.0, 100.0]
@@ -145,6 +147,8 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state[:2]+
             self.random4vec_1[:2]/2
             )
+        print(self.system.particles[0].state)
+        print(self.system.particles[1].state)
         sep_init = self.system.particles[0].sepVec(
             self.system.particles[0].state,
             self.system.particles[1].state
@@ -155,6 +159,8 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state,
             self.system.particles[1].state
             )
+        print(sep_init)
+        print(sep_final)
         self.assertTrue(
             numpy.linalg.norm(sep_final) > numpy.linalg.norm(sep_init)
             )
