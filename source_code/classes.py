@@ -53,12 +53,17 @@ class Particle():
         force[2:] = -seperation/(radius**3)
         return force*decay
 
+    def set_working_state(self, kernel_num):
+        modifier = [0, 1.0, .5, .5, 1.0]
+        self.working_state = self.state + self.kernels[kernel_num-1]*modifier[kernel_num]
+
 class System():
     def __init__(self,
             width=100, height=100,
             drag_coeff=.01, buffer_width=10.0,
             amplitude=0.0, frequency=3.14, angle=0.0,
-            time_step=0.01, cell_length=2.
+            step_size=0.01, cell_length=2.,
+            time=0.0
             ):
     #angle off of y axis
         self.width = width
@@ -66,11 +71,13 @@ class System():
         self.drag_coeff = drag_coeff
         self.buffer_width = buffer_width
         self.cell_length = cell_length
-        self.time_step = time_step
+        self.step_size = step_size
         self.particles = []
         self.amplitude = amplitude
         self.frequency = frequency
         self.angle = angle
+        self.time = time
+        self.working_time = None
 
     def add_particle(self, particle):
         particle.set_system(self)
@@ -111,3 +118,14 @@ class System():
         force = numpy.zeros(4)
         force[2:] = -self.drag_coeff*state[2:]
         return force
+
+    def set_working_time(self, kernel_num):
+        modifier = [0, 0.0, .5, .5, 1.0]
+        self.working_time = self.time+self.step_size*modifier[kernel_num]
+
+    def time_step(self):
+        self.populate_cell_list()
+        for kernel_num in range(1, 5):
+            self.set_working_time(kernel_num)
+            for particle in self.particles:
+                particle.set_working_state(kernel_num)

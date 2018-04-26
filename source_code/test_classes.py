@@ -90,7 +90,7 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[1][2])
         self.assertEqual([2,3],system.cell_list[2][4])
 
-    # @unittest.skip('pending feature')
+    @unittest.skip('pending feature')
     def test_drag_force(self):
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
@@ -113,10 +113,10 @@ class SystemTest(unittest.TestCase):
 
 class TimeStepTest(unittest.TestCase):
     def setUp(self):
-        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, time_step=0.01, cell_length=2.)
+        self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, step_size=0.01, cell_length=2.)
         self.system.add_particle(classes.Particle())
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_drag_over_time(self):
         self.system.drag_coeff = .1
         vx_0 = 10.0
