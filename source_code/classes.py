@@ -57,6 +57,17 @@ class Particle():
         modifier = [0, 1.0, .5, .5, 1.0]
         self.working_state = self.state + self.kernels[kernel_num-1]*modifier[kernel_num]
 
+    def total_force(self):
+        output = numpy.zeros(4)
+        output += self.system.confinement_force(self.working_state)
+        output += self.system.drag_force(self.working_state)
+        for neighbor_id in self.neighbor_ids:
+            output += self.interaction_force(
+                self.working_state,
+                self.system.particles[neighbor_id].working_state
+                )
+        return output
+
 class System():
     def __init__(self,
             width=100, height=100,
@@ -129,3 +140,15 @@ class System():
             self.set_working_time(kernel_num)
             for particle in self.particles:
                 particle.set_working_state(kernel_num)
+            for particle in self.particles:
+                net_force = particle.total_force()
+                particle.kernels[kernel_num][:2] = particle.working_state[2:]
+                particle.kernels[kernel_num] += net_force
+        for particle in self.particles:
+            particle.state += 6**(-1)*(
+                particle.kernels[1]+
+                2.*particle.kernels[2]+
+                2.*particle.kernels[3]+
+                particle.kernels[4]
+                )
+        self.time+=self.step_size
