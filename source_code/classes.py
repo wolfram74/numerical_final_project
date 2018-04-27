@@ -165,4 +165,5 @@ class System():
                 2.*particle.kernels[3]+
                 particle.kernels[4]
                 )
+            particle.state[0] %= self.width
         self.time+=self.step_size

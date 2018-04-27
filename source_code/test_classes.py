@@ -166,7 +166,7 @@ class TimeStepTest(unittest.TestCase):
             numpy.linalg.norm(sep_final) > numpy.linalg.norm(sep_init)
             )
 
-    @unittest.skip('pending feature')
+    # @unittest.skip('pending feature')
     def test_periodicity_cosntraint(self):
         vx_0 = 10.0
         steps = 100
@@ -174,10 +174,10 @@ class TimeStepTest(unittest.TestCase):
         for i in range(steps):
             self.system.time_step()
         self.assertTrue(
-            self.system.particles[0][0] < self.system.width
+            self.system.particles[0].state[0] < self.system.width
             )
         self.assertTrue(
-            self.system.particles[0][0] < vx_0*self.system.time_step*steps
+            self.system.particles[0].state[0] < vx_0*self.system.step_size*steps
             )
 
 if __name__ == '__main__':
