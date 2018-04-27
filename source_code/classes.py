@@ -13,7 +13,16 @@ class Particle():
         self.neighbor_ids = []
 
     def sepVec(self, vec1, vec2):
-        return vec1[:2] - vec2[:2]
+        seperation = vec1[:2] - vec2[:2]
+        if self.system==None:
+            return seperation
+        if abs(seperation[0]) < self.system.width/2:
+            return seperation
+        if seperation[0] > 0:
+            seperation[0]-=self.system.width
+        else:
+            seperation[0]+=self.system.width
+        return seperation
 
     def set_positions(self, x_position, y_position):
         self.state[:2]=[x_position, y_position]
@@ -47,15 +56,33 @@ class Particle():
         seperation = self.sepVec(state1, state2)
         radius = numpy.linalg.norm(seperation)
         decay = numpy.exp(-radius)
-        force[2:] = -seperation/(radius**3)
+        force[2:] = seperation/(radius**3)
         return force*decay
+
+    def set_working_state(self, kernel_num):
+        modifier = [0, 1.0, .5, .5, 1.0]
+        self.working_state = self.state + (
+            self.kernels[kernel_num-1]*modifier[kernel_num]
+            )
+
+    def total_force(self):
+        output = numpy.zeros(4)
+        output += self.system.confinement_force(self.working_state)
+        output += self.system.drag_force(self.working_state)
+        for neighbor_id in self.neighbor_ids:
+            output += self.interaction_force(
+                self.working_state,
+                self.system.particles[neighbor_id].working_state
+                )
+        return output
 
 class System():
     def __init__(self,
             width=100, height=100,
             drag_coeff=.01, buffer_width=10.0,
             amplitude=0.0, frequency=3.14, angle=0.0,
-            time_step=0.01, cell_length=2.
+            step_size=0.01, cell_length=2.,
+            time=0.0
             ):
     #angle off of y axis
         self.width = width
@@ -63,11 +90,13 @@ class System():
         self.drag_coeff = drag_coeff
         self.buffer_width = buffer_width
         self.cell_length = cell_length
-        self.time_step = time_step
+        self.step_size = step_size
         self.particles = []
         self.amplitude = amplitude
         self.frequency = frequency
         self.angle = angle
+        self.time = time
+        self.working_time = None
 
     def add_particle(self, particle):
         particle.set_system(self)
@@ -103,3 +132,35 @@ class System():
             -numpy.exp(self.buffer_width - y)
             )
         return force
+
+    def drag_force(self, state):
+        force = numpy.zeros(4)
+        force[2:] = -self.drag_coeff*state[2:]
+        return force
+
+    def set_working_time(self, kernel_num):
+        modifier = [0, 0.0, .5, .5, 1.0]
+        self.working_time = self.time+self.step_size*modifier[kernel_num]
+
+    def time_step(self):
+        self.populate_cell_list()
+        for particle in self.particles:
+            particle.kernels = numpy.zeros([5,4])
+        for kernel_num in range(1, 5):
+            self.set_working_time(kernel_num)
+            for particle in self.particles:
+                particle.set_working_state(kernel_num)
+            for particle in self.particles:
+                net_force = particle.total_force()
+                particle.kernels[kernel_num][:2] = particle.working_state[2:]
+                particle.kernels[kernel_num] += net_force
+                particle.kernels[kernel_num]*= self.step_size
+        for particle in self.particles:
+            particle.state += 6**(-1)*(
+                particle.kernels[1]+
+                2.*particle.kernels[2]+
+                2.*particle.kernels[3]+
+                particle.kernels[4]
+                )
+            particle.state[0] %= self.width
+        self.time+=self.step_size
