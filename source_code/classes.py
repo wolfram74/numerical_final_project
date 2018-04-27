@@ -14,8 +14,15 @@ class Particle():
 
     def sepVec(self, vec1, vec2):
         seperation = vec1[:2] - vec2[:2]
-        if self.system:
-            seperation[0] %= self.system.width #imposing periodic boundary along x
+        if self.system==None:
+            return seperation
+        if abs(seperation[0]) < self.system.width/2:
+            return seperation
+        if seperation[0] > 0:
+            seperation[0]-=self.system.width
+            # seperation[0] = seperation[0] - self.system.width
+        else:
+            seperation[0]+=self.system.width
         return seperation
 
     def set_positions(self, x_position, y_position):
@@ -50,7 +57,7 @@ class Particle():
         seperation = self.sepVec(state1, state2)
         radius = numpy.linalg.norm(seperation)
         decay = numpy.exp(-radius)
-        force[2:] = -seperation/(radius**3)
+        force[2:] = seperation/(radius**3)
         return force*decay
 
     def set_working_state(self, kernel_num):

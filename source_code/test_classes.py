@@ -55,8 +55,8 @@ class ParticleTest(unittest.TestCase):
         force = particle.interaction_force(self.random4vec_1, self.random4vec_2)
         seperation = particle.sepVec(self.random4vec_1, self.random4vec_2)
         sep_angle = numpy.arctan2(seperation[0], seperation[1])
-        opp_force_angle = numpy.arctan2(-force[2], -force[3])
-        self.assertTrue(abs(sep_angle-opp_force_angle) < 10.**-3)
+        force_angle = numpy.arctan2(force[2], force[3])
+        self.assertTrue(abs(sep_angle-force_angle) < 10.**-3)
         force2 = particle.interaction_force(
             2*self.random4vec_1, 2*self.random4vec_2
             )
@@ -159,6 +159,7 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state,
             self.system.particles[1].state
             )
+        print("seperations")
         print(sep_init)
         print(sep_final)
         self.assertTrue(
