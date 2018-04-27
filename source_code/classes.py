@@ -20,7 +20,6 @@ class Particle():
             return seperation
         if seperation[0] > 0:
             seperation[0]-=self.system.width
-            # seperation[0] = seperation[0] - self.system.width
         else:
             seperation[0]+=self.system.width
         return seperation
@@ -62,8 +61,6 @@ class Particle():
 
     def set_working_state(self, kernel_num):
         modifier = [0, 1.0, .5, .5, 1.0]
-        # print('working state set')
-        # print(self.kernels[kernel_num-1]*modifier[kernel_num])
         self.working_state = self.state + (
             self.kernels[kernel_num-1]*modifier[kernel_num]
             )

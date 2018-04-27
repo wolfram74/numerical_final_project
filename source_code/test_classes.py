@@ -19,7 +19,6 @@ class ParticleTest(unittest.TestCase):
         deltax = self.random4vec_1[0] - self.random4vec_2[0]
         self.assertEqual(deltax, seperation[0])
 
-    # @unittest.skip('pending feature')
     def test_address_find(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(classes.Particle())
@@ -30,7 +29,6 @@ class ParticleTest(unittest.TestCase):
         system.particles[0].state[:2] = [15.4, 11.2 ]
         self.assertEqual([7,5], system.particles[0].cell_address())
 
-    # @unittest.skip('pending feature')
     def test_get_neighbors(self):
         system = classes.System(width=6., height=7., cell_length=1.)
         system.add_particle(classes.Particle())
@@ -49,7 +47,6 @@ class ParticleTest(unittest.TestCase):
         self.assertEqual([0,2,3], sorted(system.particles[1].neighbor_ids))
         self.assertEqual(0, len(system.particles[4].neighbor_ids))
 
-    # @unittest.skip('pending feature')
     def test_interaction_force(self):
         particle = classes.Particle()
         force = particle.interaction_force(self.random4vec_1, self.random4vec_2)
@@ -74,7 +71,6 @@ class SystemTest(unittest.TestCase):
         system.add_particle(classes.Particle())
         self.assertEqual(2, len(system.particles))
 
-    # @unittest.skip('pending feature')
     def test_make_cell_list(self):
         system = classes.System(width=500., height=200., cell_length=2.)
         system.add_particle(classes.Particle())
@@ -90,7 +86,6 @@ class SystemTest(unittest.TestCase):
         self.assertEqual([1],system.cell_list[1][2])
         self.assertEqual([2,3],system.cell_list[2][4])
 
-    # @unittest.skip('pending feature')
     def test_drag_force(self):
         system = classes.System(drag_coeff = .1)
         state = numpy.array([0.0, 0.0, 0.0, random.random()*50-25])
@@ -98,7 +93,6 @@ class SystemTest(unittest.TestCase):
         self.assertEqual(0.0, force[2])
         self.assertTrue(0.0 > force[3]*state[3])
 
-    # @unittest.skip('pending feature')
     def test_confinement_force(self):
         system = classes.System(buffer_width = 10., height=100.)
         bottom_state = numpy.array([0.0,5.0, 0, 0])
@@ -118,7 +112,6 @@ class TimeStepTest(unittest.TestCase):
         self.system = classes.System(width=500, height=200, buffer_width=10, drag_coeff=.01, step_size=0.01, cell_length=2.)
         self.system.add_particle(classes.Particle())
 
-    # @unittest.skip('pending feature')
     def test_drag_over_time(self):
         self.system.drag_coeff = .1
         vx_0 = 10.0
@@ -128,7 +121,6 @@ class TimeStepTest(unittest.TestCase):
         self.assertTrue(vx_0 > self.system.particles[0].state[2])
         self.assertTrue(0.0 <= self.system.particles[0].state[2])
 
-    # @unittest.skip('pending feature')
     def test_confinement_over_time(self):
         self.system.add_particle(classes.Particle())
         y_0 = 1.0
@@ -138,7 +130,6 @@ class TimeStepTest(unittest.TestCase):
             self.system.time_step()
         self.assertTrue(y_0 < self.system.particles[0].state[1])
         self.assertTrue(self.system.height-y_0 > self.system.particles[1].state[1])
-    # @unittest.skip('pending feature')
 
     def test_interaction_over_time(self):
         self.system.add_particle(classes.Particle())
@@ -147,8 +138,6 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state[:2]+
             self.random4vec_1[:2]/2
             )
-        print(self.system.particles[0].state)
-        print(self.system.particles[1].state)
         sep_init = self.system.particles[0].sepVec(
             self.system.particles[0].state,
             self.system.particles[1].state
@@ -159,14 +148,10 @@ class TimeStepTest(unittest.TestCase):
             self.system.particles[0].state,
             self.system.particles[1].state
             )
-        print("seperations")
-        print(sep_init)
-        print(sep_final)
         self.assertTrue(
             numpy.linalg.norm(sep_final) > numpy.linalg.norm(sep_init)
             )
 
-    # @unittest.skip('pending feature')
     def test_periodicity_cosntraint(self):
         vx_0 = 10.0
         steps = 100
