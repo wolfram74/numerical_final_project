@@ -1,5 +1,6 @@
 import numpy
 import random
+from time import time
 
 class Particle():
     def __init__(self, state=None, index=None, system=None):
@@ -53,11 +54,11 @@ class Particle():
 
     def interaction_force(self, state1, state2):
         force = numpy.zeros(4)
-        seperation = self.sepVec(state1, state2)
-        radius = numpy.linalg.norm(seperation)
+        sep = self.sepVec(state1, state2)
+        radius = (sep[0]**2+sep[1]**2)**.5
         decay = numpy.exp(-radius)
-        force[2:] = seperation/(radius**3)
-        force[2:] += seperation/(radius**2)
+        force[2:] = sep/(radius**3)
+        force[2:] += sep/(radius**2)
         return force*decay
 
     def set_working_state(self, kernel_num):
@@ -70,6 +71,7 @@ class Particle():
         output = numpy.zeros(4)
         output += self.system.confinement_force(self.working_state)
         output += self.system.drag_force(self.working_state)
+        # print(len(self.neighbor_ids))
         for neighbor_id in self.neighbor_ids:
             output += self.interaction_force(
                 self.working_state,
@@ -152,7 +154,10 @@ class System():
             for particle in self.particles:
                 particle.set_working_state(kernel_num)
             for particle in self.particles:
+                # tk0 = time()
                 net_force = particle.total_force()
+                # tkf = time()
+                # print((tkf-tk0)*1000)
                 particle.kernels[kernel_num][:2] = particle.working_state[2:]
                 particle.kernels[kernel_num] += net_force
                 particle.kernels[kernel_num]*= self.step_size
