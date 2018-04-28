@@ -6,6 +6,13 @@ def confinment1():
     sympy.pprint(potential)
     sympy.pprint(-potential.diff(x))
 
+def interaction():
+    h, b, x = sympy.symbols('h b x', real =True)
+    potential = sympy.exp(-x)/x
+    sympy.pprint(potential)
+    sympy.pprint(-potential.diff(x))
+
 
 if __name__ =='__main__':
-    confinment1()
+    # confinment1()
+    interaction()

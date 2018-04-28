@@ -4,6 +4,8 @@ import matplotlib.animation as animation
 import time
 import math
 import os
+import re
+
 def load_data(file_address):
     file_data = open(file_address, 'r')
     positions = []
@@ -47,14 +49,19 @@ def frame_gen(frame_address):
     positions = load_data(frame_address)
     x_vals = read_column(positions,0)
     y_vals = read_column(positions,1)
-    axes.scatter(x_vals, y_vals)
-    axes.set_ylim(-1, 1)
-    axes.set_xlim(-1, 1)
+    axes.scatter(x_vals, y_vals, s=1)
+    axes.set_ylim(0, 70)
+    axes.set_xlim(0, 170)
 
 def find_files(folder):
+    def time_from_file_name(file_name):
+        matches = re.search('t_(\d*\.\d*)', file_name)
+        return float(matches.group(1))
+
     files = os.listdir(folder)
     usable_files = filter(lambda x: 'Store' not in x, files)
     address = map(lambda x: "%s/%s" %(folder, x), usable_files)
+    address = sorted(address, key=time_from_file_name)
     return address
 
 if __name__=='__main__':
@@ -62,12 +69,13 @@ if __name__=='__main__':
     axes.set_ylim(-1, 1)
     axes.set_xlim(-1, 1)
     # print(find_files('../produced_data/tht_0.6666_w_137'))
+    run_name = 'A_0.000_W_138.000_Th_0.000_Rh_0.250'
     movie = animation.FuncAnimation(
         fig,
         frame_gen,
-        frames=find_files('../produced_data/tht_0.6666_w_137')
+        frames=find_files('../produced_data/%s' % run_name)
         )
-    movie.save('test_files.mp4')
+    movie.save('test_relax.mp4')
 # '''
 '''
 import matplotlib.pyplot as plt

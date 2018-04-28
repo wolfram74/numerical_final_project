@@ -105,6 +105,10 @@ class SystemTest(unittest.TestCase):
         force_middle = system.confinement_force(middle_state)
         self.assertTrue(abs(force_middle[3]) < abs(force_top[3]))
 
+    def test_string_form(self):
+        system = classes.System()
+        self.assertTrue('Rh' in str(system))
+
 class TimeStepTest(unittest.TestCase):
     def setUp(self):
         self.random4vec_1 = numpy.array([random.random()*4.-2. for i in range(4)])
