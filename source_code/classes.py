@@ -69,6 +69,8 @@ class Particle():
 
     def total_force(self):
         output = numpy.zeros(4)
+        output += self.system.driving_force(self.working_state)
+        # print(output, self.state[1], self.system.working_time)
         output += self.system.confinement_force(self.working_state)
         output += self.system.drag_force(self.working_state)
         # print(len(self.neighbor_ids))
@@ -139,6 +141,20 @@ class System():
     def drag_force(self, state):
         force = numpy.zeros(4)
         force[2:] = -self.drag_coeff*state[2:]
+        return force
+
+    def driving_force(self, state):
+        force = numpy.zeros(4)
+        phase = numpy.cos(self.working_time*self.frequency)
+        direction = numpy.zeros(2)
+        direction[0] = -numpy.sin(self.angle)
+        direction[1] = numpy.cos(self.angle)
+        magnitude = self.amplitude
+        if state[1]>self.buffer_width:
+            magnitude*=numpy.exp(
+                -(state[1]-self.buffer_width)/(3*self.cell_length)
+                )
+        force[2:] = direction*phase*magnitude
         return force
 
     def set_working_time(self, kernel_num):

@@ -34,7 +34,7 @@ def find_files(folder):
 
 
 def ke_vs_t():
-    run_name = 'A_0.000_W_138.000_Th_0.000_Rh_0.250'
+    run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250'
     state_data = find_files('../produced_data/%s' % run_name)
     data_val = []
     t_vals = []
