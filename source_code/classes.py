@@ -3,7 +3,8 @@ import random
 
 class Particle():
     def __init__(self, state=None, index=None, system=None):
-        if state:
+        # print(state, state != None)
+        if type(state) == type(numpy.zeros(4)):
             self.state = state
         else:
             self.state = numpy.zeros(4)
@@ -166,8 +167,11 @@ class System():
         self.time+=self.step_size
 
 
+    def area(self):
+        return self.width*(self.height-2*self.buffer_width)
+
     def __str__(self):
-        area = self.width*(self.height-2*self.buffer_width)
+        area = self.area()
         density = float(len(self.particles))/area
         return 'A_%.3f_W_%.3f_Th_%.3f_Rh_%.3f' % (
             self.amplitude,
