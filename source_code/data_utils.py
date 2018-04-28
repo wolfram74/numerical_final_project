@@ -10,7 +10,7 @@ def save_state_data(system):
     folder_exists = os.path.exists(folder_address)
     if not folder_exists:
         os.makedirs(folder_address)
-    file_name = "t_%.2f.txt" % system.time
+    file_name = "t_%06.2f.txt" % system.time
     file_out = open(
         '%s/%s' % (folder_address, file_name),
         'w'

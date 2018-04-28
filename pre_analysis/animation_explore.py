@@ -4,6 +4,8 @@ import matplotlib.animation as animation
 import time
 import math
 import os
+import re
+
 def load_data(file_address):
     file_data = open(file_address, 'r')
     positions = []
@@ -52,9 +54,14 @@ def frame_gen(frame_address):
     axes.set_xlim(0, 170)
 
 def find_files(folder):
+    def time_from_file_name(file_name):
+        matches = re.search('t_(\d*\.\d*)', file_name)
+        return float(matches.group(1))
+
     files = os.listdir(folder)
     usable_files = filter(lambda x: 'Store' not in x, files)
     address = map(lambda x: "%s/%s" %(folder, x), usable_files)
+    address = sorted(address, key=time_from_file_name)
     return address
 
 if __name__=='__main__':

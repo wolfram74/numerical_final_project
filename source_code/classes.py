@@ -57,6 +57,7 @@ class Particle():
         radius = numpy.linalg.norm(seperation)
         decay = numpy.exp(-radius)
         force[2:] = seperation/(radius**3)
+        force[2:] += seperation/(radius**2)
         return force*decay
 
     def set_working_state(self, kernel_num):

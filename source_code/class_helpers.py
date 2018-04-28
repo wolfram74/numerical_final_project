@@ -13,3 +13,18 @@ def system_with_density(system, density):
             )+system.buffer_width
         state[:2] = [x_val, y_val]
         system.add_particle(classes.Particle(state=state))
+
+def load_data(file_address):
+    file_data = open(file_address, 'r')
+    states = []
+    for line in file_data:
+        values = [float(ele) for ele in line.split()]
+        states.append(values[:])
+    return states
+
+def load_state_from_file(system, file_address):
+    states = load_data(file_address)
+    for state_in in states:
+        state = numpy.zeros(4)
+        state[:] = state_in
+        system.add_particle(classes.Particle(state=state))
