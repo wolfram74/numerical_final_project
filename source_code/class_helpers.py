@@ -11,4 +11,5 @@ def system_with_density(system, density):
         y_val = random.random()*(
             system.height-2*system.buffer_width
             )+system.buffer_width
+        state[:2] = [x_val, y_val]
         system.add_particle(classes.Particle(state=state))

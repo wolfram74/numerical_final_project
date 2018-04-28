@@ -1,3 +1,4 @@
+import os
 
 def vec_as_string(vec):
     return ("%f "*len(vec)+'\n') % tuple(vec)
@@ -5,9 +6,13 @@ def vec_as_string(vec):
 
 def save_state_data(system):
     folder = str(system)
-    file_name = "t_%.2f.txt"
+    folder_address = '../produced_data/%s' % folder
+    folder_exists = os.path.exists(folder_address)
+    if not folder_exists:
+        os.makedirs(folder_address)
+    file_name = "t_%.2f.txt" % system.time
     file_out = open(
-        '../produced_data/%s/%s' % (folder, file_name),
+        '%s/%s' % (folder_address, file_name),
         'w'
         )
     for particle in system.particles:

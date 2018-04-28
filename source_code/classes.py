@@ -3,7 +3,6 @@ import random
 
 class Particle():
     def __init__(self, state=None, index=None, system=None):
-        # print(state, state != None)
         if type(state) == type(numpy.zeros(4)):
             self.state = state
         else:
