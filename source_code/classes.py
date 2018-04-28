@@ -164,3 +164,15 @@ class System():
                 )
             particle.state[0] %= self.width
         self.time+=self.step_size
+
+
+    def __str__(self):
+        area = self.width*(self.height-2*self.buffer_width)
+        density = float(len(self.particles))/area
+        return 'A_%.3f_W_%.3f_Th_%.3f_Rh_%.3f' % (
+            self.amplitude,
+            self.frequency,
+            self.angle,
+            density
+            )
+
