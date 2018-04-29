@@ -61,6 +61,11 @@ class Particle():
         force[2:] += sep/(radius**2)
         return force*decay
 
+    def interaction_potential(self, state1, state2):
+        sep = self.sepVec(state1, state2)
+        radius = (sep[0]**2+sep[1]**2)**.5
+        return numpy.exp(-radius)/radius
+
     def set_working_state(self, kernel_num):
         modifier = [0, 1.0, .5, .5, 1.0]
         self.working_state = self.state + (
@@ -80,6 +85,23 @@ class Particle():
                 self.system.particles[neighbor_id].working_state
                 )
         return output
+
+    def kinetic_energy(self):
+        return (self.state[2]**2+self.state[3]**2)/2.
+
+    def potential_energy(self):
+        total = 0
+        y_val = self.state[1]
+        height = self.system.height
+        border = self.system.buffer_width
+        total += numpy.exp(y_val-(height-border))
+        total += numpy.exp(-(y_val-border))
+        for neighbor_id in self.neighbor_ids:
+            total += self.interaction_potential(
+                self.state,
+                self.system.particles[neighbor_id].state
+                )
+        return total
 
 class System():
     def __init__(self,
@@ -190,6 +212,12 @@ class System():
 
     def area(self):
         return self.width*(self.height-2*self.buffer_width)
+
+    def kinetic_energy(self):
+        return sum(map(lambda p: p.kinetic_energy(), self.particles))/len(self.particles)
+
+    def potential_energy(self):
+        return sum(map(lambda p: p.potential_energy(), self.particles))/len(self.particles)
 
     def __str__(self):
         area = self.area()
