@@ -1,5 +1,6 @@
 import numpy
 import random
+from time import time
 
 class Particle():
     def __init__(self, state=None, index=None, system=None):
@@ -53,12 +54,17 @@ class Particle():
 
     def interaction_force(self, state1, state2):
         force = numpy.zeros(4)
-        seperation = self.sepVec(state1, state2)
-        radius = numpy.linalg.norm(seperation)
+        sep = self.sepVec(state1, state2)
+        radius = (sep[0]**2+sep[1]**2)**.5
         decay = numpy.exp(-radius)
-        force[2:] = seperation/(radius**3)
-        force[2:] += seperation/(radius**2)
+        force[2:] = sep/(radius**3)
+        force[2:] += sep/(radius**2)
         return force*decay
+
+    def interaction_potential(self, state1, state2):
+        sep = self.sepVec(state1, state2)
+        radius = (sep[0]**2+sep[1]**2)**.5
+        return numpy.exp(-radius)/radius
 
     def set_working_state(self, kernel_num):
         modifier = [0, 1.0, .5, .5, 1.0]
@@ -68,14 +74,34 @@ class Particle():
 
     def total_force(self):
         output = numpy.zeros(4)
+        output += self.system.driving_force(self.working_state)
+        # print(output, self.state[1], self.system.working_time)
         output += self.system.confinement_force(self.working_state)
         output += self.system.drag_force(self.working_state)
+        # print(len(self.neighbor_ids))
         for neighbor_id in self.neighbor_ids:
             output += self.interaction_force(
                 self.working_state,
                 self.system.particles[neighbor_id].working_state
                 )
         return output
+
+    def kinetic_energy(self):
+        return (self.state[2]**2+self.state[3]**2)/2.
+
+    def potential_energy(self):
+        total = 0
+        y_val = self.state[1]
+        height = self.system.height
+        border = self.system.buffer_width
+        total += numpy.exp(y_val-(height-border))
+        total += numpy.exp(-(y_val-border))
+        for neighbor_id in self.neighbor_ids:
+            total += self.interaction_potential(
+                self.state,
+                self.system.particles[neighbor_id].state
+                )
+        return total
 
 class System():
     def __init__(self,
@@ -139,6 +165,20 @@ class System():
         force[2:] = -self.drag_coeff*state[2:]
         return force
 
+    def driving_force(self, state):
+        force = numpy.zeros(4)
+        phase = numpy.cos(self.working_time*self.frequency)
+        direction = numpy.zeros(2)
+        direction[0] = -numpy.sin(self.angle)
+        direction[1] = numpy.cos(self.angle)
+        magnitude = self.amplitude
+        if state[1]>self.buffer_width:
+            magnitude*=numpy.exp(
+                -(state[1]-self.buffer_width)/(3*self.cell_length)
+                )
+        force[2:] = direction*phase*magnitude
+        return force
+
     def set_working_time(self, kernel_num):
         modifier = [0, 0.0, .5, .5, 1.0]
         self.working_time = self.time+self.step_size*modifier[kernel_num]
@@ -152,7 +192,10 @@ class System():
             for particle in self.particles:
                 particle.set_working_state(kernel_num)
             for particle in self.particles:
+                # tk0 = time()
                 net_force = particle.total_force()
+                # tkf = time()
+                # print((tkf-tk0)*1000)
                 particle.kernels[kernel_num][:2] = particle.working_state[2:]
                 particle.kernels[kernel_num] += net_force
                 particle.kernels[kernel_num]*= self.step_size
@@ -169,6 +212,12 @@ class System():
 
     def area(self):
         return self.width*(self.height-2*self.buffer_width)
+
+    def kinetic_energy(self):
+        return sum(map(lambda p: p.kinetic_energy(), self.particles))/len(self.particles)
+
+    def potential_energy(self):
+        return sum(map(lambda p: p.potential_energy(), self.particles))/len(self.particles)
 
     def __str__(self):
         area = self.area()

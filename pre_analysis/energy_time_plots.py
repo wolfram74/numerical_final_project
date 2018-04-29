@@ -1,6 +1,7 @@
 import os
 import re
 from matplotlib import pyplot
+import time
 
 def load_data(file_address):
     file_data = open(file_address, 'r')
@@ -34,7 +35,7 @@ def find_files(folder):
 
 
 def ke_vs_t():
-    run_name = 'A_0.000_W_138.000_Th_0.000_Rh_0.250'
+    run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250'
     state_data = find_files('../produced_data/%s' % run_name)
     data_val = []
     t_vals = []
@@ -45,5 +46,20 @@ def ke_vs_t():
     pyplot.plot(read_column(data_val, 0), read_column(data_val, 1))
     pyplot.show()
 
+def energy_plots():
+    run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250.txt'
+    # run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250_si_0.05.txt'
+    data_vals = load_data('../produced_data/energy_plots/%s' % run_name)
+    print(len(data_vals))
+    t_vals = read_column(data_vals, 0)
+    PE_vals = read_column(data_vals, 1)
+    KE_vals = read_column(data_vals, 2)
+    TE_vals = read_column(data_vals, 3)
+    pyplot.plot(t_vals, PE_vals)
+    pyplot.plot(t_vals, KE_vals)
+    pyplot.plot(t_vals, TE_vals)
+    pyplot.savefig("%d.png" % int(time.time()))
+
 if __name__=='__main__':
-    ke_vs_t()
+    # ke_vs_t()
+    energy_plots()
