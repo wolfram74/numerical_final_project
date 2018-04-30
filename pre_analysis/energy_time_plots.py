@@ -46,8 +46,8 @@ def ke_vs_t():
     pyplot.plot(read_column(data_val, 0), read_column(data_val, 1))
     pyplot.show()
 
-def energy_plots():
-    run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250.txt'
+def energy_plots(run_name):
+    label = run_name[:-4]
     # run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250_si_0.05.txt'
     data_vals = load_data('../produced_data/energy_plots/%s' % run_name)
     print(len(data_vals))
@@ -58,8 +58,17 @@ def energy_plots():
     pyplot.plot(t_vals, PE_vals)
     pyplot.plot(t_vals, KE_vals)
     pyplot.plot(t_vals, TE_vals)
-    pyplot.savefig("%d.png" % int(time.time()))
+    pyplot.savefig("%s.png" % label)
+    pyplot.clf()
 
+def all_energy_plots():
+    folder = '../produced_data/energy_plots'
+    files = os.listdir(folder)
+    usable_files = filter(lambda x: 'Store' not in x, files)
+    for name in usable_files:
+        print(name)
+        energy_plots(name)
 if __name__=='__main__':
     # ke_vs_t()
-    energy_plots()
+    # energy_plots()
+    all_energy_plots()
