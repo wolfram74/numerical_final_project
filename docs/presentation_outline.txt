@@ -1,0 +1,27 @@
+things to talk about:
+  model description:
+    potential energy interaction
+      1/r * e^-r
+    drag
+      -gamma * v
+    confinement
+    driving
+  implementation:
+    cell lists
+    language of choice
+    testing habits
+    results:
+      movie and/or text files parsed into graphs
+  model parameters:
+    dimensions of confinement
+    density
+  observations:
+    heat map of effect on potential energy
+    high frequency => low effect
+    low frequency => moderate effect
+    oblique angles => low effect
+  further inquiries:
+    higher driving force at obliquge angles
+    long simulations at very low frequencies
+    more resolution in angle space
+
