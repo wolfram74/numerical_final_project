@@ -24,4 +24,5 @@ things to talk about:
     higher driving force at obliquge angles
     long simulations at very low frequencies
     more resolution in angle space
+    narrower and deeper
 

@@ -27,7 +27,7 @@ def continue_system():
         width=500./3., height=200./3.0,
         drag_coeff=.01, buffer_width=10.0,
         frequency=1., time =0.0,
-        amplitude=3.,
+        amplitude=3., angle=0.,
         step_size=.05
         )
     last_state= './w_167_h_77.txt'
@@ -38,7 +38,7 @@ def continue_system():
     data_utils.save_state_data(system)
     for i in xrange(loops):
         system.time_step()
-        # data_utils.save_state_data(system)
+        data_utils.save_state_data(system)
         print(
             i,
             system.time,
@@ -82,8 +82,8 @@ def energy_plot(freq, angle):
 
 if __name__ == '__main__':
     # relaxer()
-    # continue_system()
-    for freq in numpy.linspace(1, 5, num=5, endpoint=True):
-        for angle in numpy.linspace(0, numpy.pi/2, num=5, endpoint=True):
-            print(freq, angle)
-            energy_plot(freq, angle)
+    continue_system()
+    # for freq in numpy.linspace(1, 5, num=5, endpoint=True):
+    #     for angle in numpy.linspace(0, numpy.pi/2, num=5, endpoint=True):
+    #         print(freq, angle)
+    #         energy_plot(freq, angle)

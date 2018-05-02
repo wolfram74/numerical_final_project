@@ -43,8 +43,8 @@ class Particle():
         margin = 2
         col_max = len(system.cell_list[0])-1
         row_max = len(system.cell_list)-1
-        for col_index in range(col-margin, col+margin+1):
-            for row_index in range(row-margin, row+margin+1):
+        for col_index in xrange(col-margin, col+margin+1):
+            for row_index in xrange(row-margin, row+margin+1):
                 if row_index > row_max or row_index < 0:
                     continue
                 inspect_row = row_index

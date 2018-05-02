@@ -70,13 +70,14 @@ if __name__=='__main__':
     axes.set_xlim(-1, 1)
     # print(find_files('../produced_data/tht_0.6666_w_137'))
     # run_name = 'A_0.000_W_138.000_Th_0.000_Rh_0.250'
+    # run_name = 'A_3.000_W_1.000_Th_1.571_Rh_0.250'
     run_name = 'A_3.000_W_1.000_Th_0.000_Rh_0.250'
     movie = animation.FuncAnimation(
         fig,
         frame_gen,
         frames=find_files('../produced_data/%s' % run_name)
         )
-    movie.save('test_relax.mp4')
+    movie.save('direct_driving.mp4')
 # '''
 '''
 import matplotlib.pyplot as plt
